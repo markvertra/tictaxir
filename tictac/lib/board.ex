@@ -3,32 +3,38 @@ defmodule Board do
 
   #Client
   
-  def build(n) when is_integer(n) do
-    start_board_server(n)
+  def build(n, opts \\ %{})
+  
+  def build(n, opts) when is_integer(n) do
+    start_board_server(n, opts)
   end
 
-  def display(client) do
-    GenServer.call(client, {:display})
-  end 
-
-  def get(client, {column, row}) do
-    GenServer.call(client, {:get, {column, row}})
-  end 
-
-  def put(client, item, {column, row}) do
-    GenServer.cast(client, {:put, item, {column, row}})
+  def build(_n, _opts) do
+    {:error, "invalid parameters"}
   end
 
-  def clear(client) do
-    GenServer.call(client, {:clear})
+  def display(board) do
+    GenServer.call(board, {:display})
   end 
 
-  def stop(client) do
-    GenServer.stop(client)
+  def get(board, {column, row}) do
+    GenServer.call(board, {:get, {column, row}})
+  end 
+
+  def put(board, item, {column, row}) do
+    GenServer.cast(board, {:put, item, {column, row}})
   end
 
-  defp start_board_server(n) do
-    GenServer.start_link(__MODULE__, board_builder(n))
+  def clear(board) do
+    GenServer.call(board, {:clear})
+  end 
+
+  def stop(board) do
+    GenServer.stop(board)
+  end
+
+  defp start_board_server(n, opts) do
+    GenServer.start_link(__MODULE__, board_builder(n), name: opts[:name] || __MODULE__)
   end
 
   defp board_builder(n) do

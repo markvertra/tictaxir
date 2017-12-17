@@ -1,6 +1,5 @@
-defmodule TictacTest do
+defmodule TicTacToe.Test do
   use ExUnit.Case
-  doctest Tictac
 
   test 'can create valid board' do
     {check, _val} = Board.build("duck")
@@ -39,15 +38,20 @@ defmodule TictacTest do
     assert Board.get(board, {1, 3}) == nil
   end 
 
-  test 'can create player' do
+  test 'can start a game' do
+    {check, _game} = TicTacToe.start(5)
+    assert check == :ok
+  end
+
+  test 'player 1 can mark a square' do
   # try creating player properly succeed, player badly fail
   end
 
-  test 'can create second player' do
+  test 'player 2 can mark a square' do
   # try creating player properly succeed, same as first, fail
   end 
 
-  test 'can invite players to game' do
+  test 'player 1 can not mark a square that is already marked' do
   # try inviting players, starting game without players, inviting third player
   end 
 
