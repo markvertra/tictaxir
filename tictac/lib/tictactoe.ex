@@ -32,16 +32,16 @@ defmodule TicTacToe do
 
   def init(n) do 
     {:ok, board} = Board.build(n)
-    {:ok, %{:turn => :p1, :game_board => board}}
+    {:ok, %{:turn => 1, :game_board => board}}
   end
 
   def handle_call({:go, {column, row}}, _from, game) do
     case Board.get(game[:game_board], {column, row}) do
       nil -> 
         Board.put(game[:game_board], game[:turn], {column, row})
-        {:reply, {{column, row}, game[:turn]}, turn_change(game)}
+        {:reply, {:ok, "Good move #{game[:turn]}"}, turn_change(game)}
       _ ->
-        {:reply, "Place already taken, go again", game}
+        {:reply, {:error, "Place already taken, go again"}, game}
     end
   end
 
@@ -58,8 +58,8 @@ defmodule TicTacToe do
 
   defp turn_change(game) do
     case game[:turn] do
-      :p1 -> Map.put(game, :turn, :p2)
-      :p2 -> Map.put(game, :turn, :p1)
+      1 -> Map.put(game, :turn, 2)
+      2 -> Map.put(game, :turn, 1)
     end
   end
 end

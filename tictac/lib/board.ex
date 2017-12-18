@@ -38,7 +38,7 @@ defmodule Board do
   end
 
   defp board_builder(n) do
-    List.duplicate(nil, n) |>
+    List.duplicate(0, n) |>
     List.duplicate(n)
   end
 

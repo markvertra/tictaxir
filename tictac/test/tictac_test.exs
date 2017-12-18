@@ -43,21 +43,17 @@ defmodule TicTacToe.Test do
     assert check == :ok
   end
 
-  test 'player 1 can mark a square' do
-  # try creating player properly succeed, player badly fail
+  test 'can mark an occupied square' do
+    {:ok, _game} = TicTacToe.start(3)
+    {check, _result} = TicTacToe.go({1,1})
+    assert :ok == check
+
+    {check, _result} = TicTacToe.go({0,1})
+    assert :ok == check
+
+    {check, _result} = TicTacToe.go({0,1})
+    assert :error == check
   end
-
-  test 'player 2 can mark a square' do
-  # try creating player properly succeed, same as first, fail
-  end 
-
-  test 'player 1 can not mark a square that is already marked' do
-  # try inviting players, starting game without players, inviting third player
-  end 
-
-  test 'player can make a move' do 
-  # player makes legal move, player makes illegal move due to bad entry, player makes illegal move due to already used
-  end 
 
   test 'the correct player wins' do 
   # player wins, player draws, player uses, known earlire or wait until all moves?
