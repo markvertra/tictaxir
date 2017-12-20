@@ -32,21 +32,21 @@ defmodule TicTacToe do
 
   def init(n) do 
     {:ok, board} = Board.build(n)
-    {:ok, %{:turn => 1, :game_board => board}}
+    {:ok, %{:turn => 1, :game_board => board, :results => %{:draw => 0, :win1 => 0, :win2 => 0}}}
   end
 
   def handle_call({:go, {column, row}}, _from, game) do
     case Board.get(game[:game_board], {column, row}) do
       0 -> 
         Board.put(game[:game_board], game[:turn], {column, row})
-        {result, message, _board} = VictoryConditions.test(Board.display(game[:game_board]))
+        {result, message} = VictoryConditions.test(Board.display(game[:game_board]))
         case result do
-          :ok ->
-            {:reply, {:ok, "Good move #{game[:turn]}"}, turn_change(game)}
-          _ ->
-            Board.clear(game[:game_board])
-            {:reply, {:ok, message}, game}
+          :ok -> {:reply, {:ok, "Good move #{game[:turn]}"}, turn_change(game)}
+          :win1 -> end_game(game, :win1)
+          :win2 -> end_game(game, :win2)
+          :draw -> end_game(game, :draw)
         end
+        {:reply, {:ok, message}, game}
       _ ->
         {:reply, {:error, "Place already taken, go again"}, game}
     end
@@ -62,6 +62,11 @@ defmodule TicTacToe do
   def handle_call({:restart}, _from, game) do
     Board.clear(game[:game_board])
     {:reply, "Game Restarted", game}
+  end
+
+  defp end_game(game, outcome) do
+    Board.clear(game[:game_board])
+    update_in(game, [:results, outcome], &(&1 + 1))
   end
 
   defp turn_change(game) do
