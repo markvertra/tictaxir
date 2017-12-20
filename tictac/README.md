@@ -1,21 +1,15 @@
-# Tictac
 
-**TODO: Add description**
+TicTacToe implementation in Elixir. To run:
 
-## Installation
+TicTacToe.start(n) where n is the size of the game
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `tictac` to your list of dependencies in `mix.exs`:
+TicTacToe.go({x, y}) to choose a square
 
-```elixir
-def deps do
-  [
-    {:tictac, "~> 0.1.0"}
-  ]
-end
-```
+TicTacToe.display to see the board
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/tictac](https://hexdocs.pm/tictac).
+TicTacToe.restart to restart the game
+
+Currently Player 1 is marked by 1's and Player 2 b 2's
+
+
 

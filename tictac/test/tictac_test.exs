@@ -13,17 +13,17 @@ defmodule TicTacToe.Test do
   end 
 
   test 'can view board' do
-    {:ok, board} = Board.build(8)
+    {:ok, board} = Board.build(4)
     visual_board = Board.display(board)
-    assert length(visual_board) == 8
-    assert length(Enum.at(visual_board,0)) == 8
+    assert length(visual_board) == 4
+    assert length(Enum.at(visual_board,0)) == 4
     assert Enum.at(visual_board, 0) |>
-           Enum.at(0) == nil
+           Enum.at(0) == 0
   end
 
   test 'can get and put square in board' do
     {:ok, board} = Board.build(5)
-    assert Board.get(board, {1, 3}) == nil
+    assert Board.get(board, {1, 3}) == 0
 
     Board.put(board, "fox", {1, 3})
     assert Board.get(board, {1, 3}) == "fox"
@@ -35,7 +35,7 @@ defmodule TicTacToe.Test do
     assert Board.get(board, {1, 3}) == "fox"
     
     Board.clear(board)
-    assert Board.get(board, {1, 3}) == nil
+    assert Board.get(board, {1, 3}) == 0
   end 
 
   test 'can start a game' do

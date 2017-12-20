@@ -3,7 +3,7 @@ defmodule TicTacToe do
 
   # Client API 
 
-  def start(n) when n > 2 and n < 11 do 
+  def start(n) when n > 2 and n < 6 do 
     start_link(n)
   end
 
@@ -37,9 +37,16 @@ defmodule TicTacToe do
 
   def handle_call({:go, {column, row}}, _from, game) do
     case Board.get(game[:game_board], {column, row}) do
-      nil -> 
+      0 -> 
         Board.put(game[:game_board], game[:turn], {column, row})
-        {:reply, {:ok, "Good move #{game[:turn]}"}, turn_change(game)}
+        {result, message, _board} = VictoryConditions.test(Board.display(game[:game_board]))
+        case result do
+          :ok ->
+            {:reply, {:ok, "Good move #{game[:turn]}"}, turn_change(game)}
+          _ ->
+            Board.clear(game[:game_board])
+            {:reply, {:ok, message}, game}
+        end
       _ ->
         {:reply, {:error, "Place already taken, go again"}, game}
     end
@@ -53,7 +60,8 @@ defmodule TicTacToe do
   end
 
   def handle_call({:restart}, _from, game) do
-    {:reply, "Game Restarted", Board.clear(game[:game_board])}
+    Board.clear(game[:game_board])
+    {:reply, "Game Restarted", game}
   end
 
   defp turn_change(game) do

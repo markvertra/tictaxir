@@ -57,7 +57,7 @@ defmodule Board do
   end
 
   def handle_call({:clear}, _from, board) do
-    {:reply, :ok, board_builder(length(board))}
+    {:reply, :ok, Enum.map(board, fn x -> Enum.map(x, fn _y -> 0 end) end)}
   end
 
   def handle_cast({:put, item, {column, row}}, board) do
