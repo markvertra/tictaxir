@@ -39,14 +39,20 @@ defmodule TicTacToe do
     case Board.get(game[:game_board], {column, row}) do
       0 -> 
         Board.put(game[:game_board], game[:turn], {column, row})
-        {result, message} = VictoryConditions.test(Board.display(game[:game_board]))
+        {result,} = VictoryConditions.test(Board.display(game[:game_board]))
         case result do
-          :ok -> {:reply, {:ok, "Good move #{game[:turn]}"}, turn_change(game)}
-          :win1 -> end_game(game, :win1)
-          :win2 -> end_game(game, :win2)
-          :draw -> end_game(game, :draw)
+          :ok -> 
+            case VictoryConditions.stalemate_test(game[:game_board]) do
+              nil -> 
+                result = :draw
+                end_game(game, result) 
+              _ ->
+                {:reply, {:ok, "Good move #{game[:turn]}"}, turn_change(game)}
+            end
+          :win1 -> end_game(game, result)
+          :win2 -> end_game(game, result)
         end
-        {:reply, {:ok, message}, game}
+        {:reply, {result}, game}
       _ ->
         {:reply, {:error, "Place already taken, go again"}, game}
     end
